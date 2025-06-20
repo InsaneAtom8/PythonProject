@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>📚 BookVerse</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            margin: 10px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.7s ease forwards;
+            transition: transform 0.3s;
+        }
+
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+
+        .book-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+        }
+
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .book-author {
+            font-size: 15px;
+            color: #bbbbbb;
+        }
+
+        .book-year {
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .book-desc {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #cccccc;
+        }
+
+        .book-rating {
+            margin-top: 8px;
+            font-size: 14px;
+            color: gold;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #ff6666;
+            margin-top: 40px;
+        }
+
+        ::placeholder {
+            color: #aaaaaa;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Your Gateway to Great Reads</h1>
+
+        <form method="POST">
+            <input type="text" name="query" placeholder="Discover Your Next Adventure…" value="{{ query }}">
+            <select name="genre">
+                <option value="">-- Select Genre --</option>
+                {% for genre in genres %}
+                    <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>{{ genre }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">🔍 Search</button>
+        </form>
+
+        {% if books %}
+            <div class="results">
+                {% for book in books %}
+                    <div class="book-card">
+                        {% if book.cover %}
+                            <img src="{{ book.cover }}" alt="{{ book.title }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/150x220?text=No+Cover" alt="No cover available">
+                        {% endif %}
+                        <div class="book-title">{{ book.title }}</div>
+                        <div class="book-author">by {{ book.author }}</div>
+                        <div class="book-year">Published: {{ book.year }}</div>
+                        <div class="book-desc">{{ book.description }}</div>
+                        <div class="book-rating">⭐ {{ book.rating }} / 5</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>No books found. Try a different search or genre.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
